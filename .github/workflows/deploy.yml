@@ -3,7 +3,7 @@ name: 🚀 Deploy to Hugging Face Spaces
 on:
   push:
     branches:
-      - main   # Runs when you push to the main branch
+      - main
 
 jobs:
   deploy:
@@ -24,7 +24,6 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          hf upload ./ \
-            --repo-id Thilagavathy/finalproject \
+          hf upload ./ Thilagavathy/finalproject \
             --repo-type space \
             --commit-message "🚀 Auto-deploy from GitHub"
