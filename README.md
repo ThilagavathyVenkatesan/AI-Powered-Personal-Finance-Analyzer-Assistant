@@ -145,3 +145,9 @@ git push -u origin main
 3.Add HF_TOKEN in GitHub repo → Settings → Secrets → Actions.
 
 4.Done 🎉 → Your Hugging Face Space auto-deploys on every push.
+```
+## 📸 Screenshots
+<img width="1366" height="768" alt="Screenshot (77)" src="https://github.com/user-attachments/assets/33abd28a-2f51-4be7-b363-327a0e9ba411" />
+<img width="1366" height="768" alt="Screenshot (78)" src="https://github.com/user-attachments/assets/bf26094f-d3e4-444b-8208-b9bb59492b67" />
+<img width="1366" height="768" alt="Screenshot (79)" src="https://github.com/user-attachments/assets/7b076642-1fab-43b2-8c04-8a6cd4513286" />
+
