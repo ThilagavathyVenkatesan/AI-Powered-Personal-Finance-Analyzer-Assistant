@@ -7,18 +7,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
+          persist-credentials: false
           fetch-depth: 0
-      - name: Set git user
+
+      - name: Set up git user
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "github-actions[bot]"
-      - name: Pull latest from Hugging Face
+
+      - name: Pull latest from Hugging Face Space (rebase)
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git pull --rebase https://user:$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git main || true
+          git remote add hf https://user:$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git || true
+          git fetch hf main
+          git rebase hf/main
+
       - name: Commit changes if needed
         run: |
           git add -A
@@ -27,7 +34,8 @@ jobs:
           else
             git commit -m "🚀 Auto-deploy: update Space from GitHub Actions"
           fi
-      - name: Push to Hugging Face
+
+      - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
