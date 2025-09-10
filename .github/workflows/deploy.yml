@@ -18,12 +18,13 @@ jobs:
           python-version: "3.9"
 
       - name: Install Hugging Face CLI
-        run: pip install huggingface_hub
+        run: pip install huggingface_hub --upgrade
 
       - name: Upload to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          hf upload ./ Thilagavathy/finalproject \
+          hf upload ./ \
+            --repo-id Thilagavathy/finalproject \
             --repo-type space \
             --commit-message "🚀 Auto-deploy from GitHub"
