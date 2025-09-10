@@ -23,11 +23,12 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "github-actions[bot]"
 
-          HF_REPO="https://$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git"
+          HF_REPO="https://huggingface.co/spaces/Thilagavathy/finalproject"
 
-          # Add HF remote (remove if exists)
+          # Remove old remote if exists
           git remote remove hf || true
-          git remote add hf "$HF_REPO"
+          # Add remote using HF token for authentication
+          git remote add hf https://user:$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git
 
           # Stage + commit if needed
           git add -A
