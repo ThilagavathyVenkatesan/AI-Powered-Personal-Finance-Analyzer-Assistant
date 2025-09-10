@@ -37,11 +37,11 @@ jobs:
           if token is None:
               raise SystemExit("❌ HF_TOKEN not found in environment")
 
-          # Create repo if not exists, with Streamlit SDK
+          # ✅ Correct: use sdk instead of space_sdk
           api.create_repo(
               repo_id=repo_id,
               repo_type="space",
-              space_sdk="streamlit",   # ✅ Required now
+              sdk="streamlit",
               token=token,
               exist_ok=True
           )
