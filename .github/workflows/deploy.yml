@@ -1,39 +1,32 @@
-name: 🚀 Deploy to Hugging Face Spaces   # Name of the workflow
+name: 🚀 Deploy to Hugging Face Spaces
 
 on:
-  push:                                  # When should this workflow run?
+  push:
     branches:
-      - main                             # It runs only when you push to main branch
+      - main
 
 jobs:
-  deploy:                                # Define a job called "deploy"
-    runs-on: ubuntu-latest               # The job runs inside a Linux VM
-
-    steps:                               # Steps in this job
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout code
-        uses: actions/checkout@v3        # Pulls your repo code into the VM
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v4    # Installs Python
+        uses: actions/setup-python@v4
         with:
-          python-version: "3.9"          # Use Python 3.9 (compatible with Streamlit)
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
-          pip install huggingface_hub    # Install Hugging Face CLI tools
+          pip install huggingface_hub
 
-      - name: Push to Hugging Face Space
+      - name: Upload to Hugging Face Space
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}   # Inject your Hugging Face API token securely
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          huggingface-cli repo create finance-analyzer \
-            --type space \
-            --sdk streamlit \
-            --yes \
-            --token $HF_TOKEN || true
-
           huggingface-cli upload ./ \
-            --repo finance-analyzer \
-            --token $HF_TOKEN \
+            YOUR_USERNAME/finance-analyzer \
             --repo-type space \
-            --commit-message "🚀 Auto-deploy from GitHub"
+            --commit-message "🚀 Auto-deploy from GitHub" \
+            --token $HF_TOKEN
