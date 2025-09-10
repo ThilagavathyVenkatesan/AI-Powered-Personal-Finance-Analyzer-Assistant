@@ -3,7 +3,7 @@ name: 🚀 Deploy to Hugging Face Spaces (git push)
 on:
   push:
     branches:
-      - main
+      - main   # Trigger only when pushing to main branch
 
 jobs:
   deploy:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          persist-credentials: false   # we'll use HF token for the HF remote
+          persist-credentials: false   # we'll use HF token for Hugging Face remote
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -30,21 +30,22 @@ jobs:
           python - <<'PY'
           import os
           from huggingface_hub import HfApi
+
           api = HfApi()
           repo_id = "Thilagavathy/finalproject"
           token = os.environ.get("HF_TOKEN")
           if token is None:
-              raise SystemExit("HF_TOKEN not found in environment")
-          # create_repo supports exist_ok in newer versions; guard both ways
-          try:
-              api.create_repo(repo_id=repo_id, repo_type="space", token=token, exist_ok=True)
-          except TypeError:
-              # older signature
-              try:
-                  api.create_repo(repo_id=repo_id, token=token, repo_type="space")
-              except Exception as e:
-                  print("create_repo fallback exception (continuing):", e)
-          print("Ensured repo exists:", repo_id)
+              raise SystemExit("❌ HF_TOKEN not found in environment")
+
+          # Create repo if not exists, with Streamlit SDK
+          api.create_repo(
+              repo_id=repo_id,
+              repo_type="space",
+              space_sdk="streamlit",   # ✅ Required now
+              token=token,
+              exist_ok=True
+          )
+          print("✅ Ensured Hugging Face Space exists:", repo_id)
           PY
 
       - name: Commit & push to Hugging Face Space (git)
@@ -52,23 +53,22 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           set -e
-          # configure git author
           git config --global user.email "action@github.com"
           git config --global user.name "github-actions[bot]"
 
           HF_REPO="https://$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git"
 
-          # add HF remote if it doesn't exist
+          # Add HF remote (remove old if exists)
           git remote remove hf || true
           git remote add hf "$HF_REPO"
 
-          # ensure files staged & commit if changes
+          # Stage changes
           git add -A
           if git diff --cached --quiet; then
-            echo "No changes to commit"
+            echo "ℹ️ No changes to commit"
           else
-            git commit -m "Auto-deploy: update Space from GitHub Actions"
+            git commit -m "🚀 Auto-deploy: update Space from GitHub Actions"
           fi
 
-          # Force push current HEAD to main on the HF Space
+          # Push to Space
           git push hf HEAD:main --force
