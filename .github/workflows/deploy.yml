@@ -1,9 +1,9 @@
-name: 🚀 Deploy to Hugging Face Spaces (git push)
+name: 🚀 Deploy to Hugging Face Spaces (git push only)
 
 on:
   push:
     branches:
-      - main   # Trigger only when pushing to main branch
+      - main
 
 jobs:
   deploy:
@@ -13,42 +13,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          persist-credentials: false   # we'll use HF token for Hugging Face remote
+          persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-
-      - name: Install huggingface_hub
-        run: pip install --upgrade huggingface_hub
-
-      - name: Ensure HF Space exists
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          python - <<'PY'
-          import os
-          from huggingface_hub import HfApi
-
-          api = HfApi()
-          repo_id = "Thilagavathy/finalproject"
-          token = os.environ.get("HF_TOKEN")
-          if token is None:
-              raise SystemExit("❌ HF_TOKEN not found in environment")
-
-          # ✅ Use space_sdk (works with older huggingface_hub)
-          api.create_repo(
-              repo_id=repo_id,
-              repo_type="space",
-              space_sdk="streamlit",
-              token=token,
-              exist_ok=True
-          )
-          print("✅ Ensured Hugging Face Space exists:", repo_id)
-          PY
-
-      - name: Commit & push to Hugging Face Space (git)
+      - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
@@ -58,11 +25,11 @@ jobs:
 
           HF_REPO="https://$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git"
 
-          # Add HF remote (remove old if exists)
+          # Add HF remote (remove if exists)
           git remote remove hf || true
           git remote add hf "$HF_REPO"
 
-          # Stage changes
+          # Stage + commit if needed
           git add -A
           if git diff --cached --quiet; then
             echo "ℹ️ No changes to commit"
@@ -70,5 +37,5 @@ jobs:
             git commit -m "🚀 Auto-deploy: update Space from GitHub Actions"
           fi
 
-          # Push to Space
+          # Push to Hugging Face Space
           git push hf HEAD:main --force
