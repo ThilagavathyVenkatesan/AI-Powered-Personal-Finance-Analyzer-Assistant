@@ -17,16 +17,15 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Install dependencies
-        run: |
-          pip install huggingface_hub
+      - name: Install Hugging Face CLI
+        run: pip install huggingface_hub
 
       - name: Upload to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           huggingface-cli upload ./ \
-            YOUR_USERNAME/finance-analyzer \
+            Thilagavathy/finalproject \
             --repo-type space \
             --commit-message "🚀 Auto-deploy from GitHub" \
             --token $HF_TOKEN
