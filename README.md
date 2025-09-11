@@ -12,11 +12,19 @@ pinned: false
 # AI-Powered-Personal-Finance-Analyzer-Assistant
 AI-powered application that processes UPI transaction statements from multiple apps and generates actionable insights and personalized financial advice using LLMs. The system extract transaction details from varied PDF formats, structure the data, analyze spending behavior, and deliver tailored recommendations to users via an interactive report.
 
+[![Deploy to Hugging Face](https://img.shields.io/badge/🚀_HuggingFace-Live_Space-orange)](https://huggingface.co/spaces/Thilagavathy/finalproject)
+[![GitHub Actions](https://github.com/ThilagavathyVenkatesan/AI-Powered-Personal-Finance-Analyzer-Assistant/actions/workflows/deploy.yml/badge.svg)](https://github.com/ThilagavathyVenkatesan/AI-Powered-Personal-Finance-Analyzer-Assistant/actions)
+![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
+![Streamlit](https://img.shields.io/badge/streamlit-🎈_app-ff4b4b.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
+
 ## 💼 Business Use Cases
 - **Personal Finance Management** : Help users track and understand spending behavior.
 - **Spending Habit Detection** : Identify patterns, frequent merchants, and wasteful expenses.
 - **Budgeting Assistant** : Recommend personalized savings strategies and alert users.
 - **Multi-App Integration** : Unify transactions across different UPI platforms.
+
 
 ## 📑 Project Structure
 
@@ -165,6 +173,9 @@ git push -u origin main
 
 4.Done 🎉 → Your Hugging Face Space auto-deploys on every push.
 ```
+🌐 **Live Demo**: 👉 [Try on Hugging Face](https://huggingface.co/spaces/Thilagavathy/finalproject)  
+📦 **Source Code**: 👉 [GitHub Repository](https://github.com/ThilagavathyVenkatesan/AI-Powered-Personal-Finance-Analyzer-Assistant)
+
 ## 📸 Screenshots
 <img width="1366" height="768" alt="Screenshot (77)" src="https://github.com/user-attachments/assets/33abd28a-2f51-4be7-b363-327a0e9ba411" />
 <img width="1366" height="768" alt="Screenshot (78)" src="https://github.com/user-attachments/assets/bf26094f-d3e4-444b-8208-b9bb59492b67" />
