@@ -99,7 +99,7 @@ MIT License
 
 # 📄 .github/workflows/deploy.yml
 ```yaml
-name: 🚀 Deploy to Hugging Face Spaces
+name: 🚀 Deploy to Hugging Face Spaces (force push)
 
 on:
   push:
@@ -109,25 +109,33 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
         with:
-          python-version: "3.9"
+          persist-credentials: false
+          fetch-depth: 0
 
-      - name: Install dependencies
+      - name: Set up git user
         run: |
-          pip install huggingface_hub
+          git config --global user.email "action@github.com"
+          git config --global user.name "github-actions[bot]"
 
       - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          huggingface-cli repo create finance-analyzer --type space --sdk streamlit --yes --token $HF_TOKEN || true
-          huggingface-cli upload ./ --repo finance-analyzer --token $HF_TOKEN --repo-type space --commit-message "🚀 Auto-deploy from GitHub"
+          set -e
+          HF_REPO="https://user:$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git"
+
+          # Remove old remote if exists, then add fresh one
+          git remote remove hf || true
+          git remote add hf "$HF_REPO"
+
+          # 🚨 Force push GitHub main branch → Hugging Face main
+          git push hf main --force
+
 ```
 ## ✅ How to Use
 ```
