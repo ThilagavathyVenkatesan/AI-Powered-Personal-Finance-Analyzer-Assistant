@@ -1,11 +1,14 @@
-name: 🚀 Deploy to Hugging Face Spaces (git push only)
+name: 🚀 Deploy to Hugging Face Spaces (force push)
+
 on:
   push:
     branches:
       - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -18,25 +21,16 @@ jobs:
           git config --global user.email "action@github.com"
           git config --global user.name "github-actions[bot]"
 
-      - name: Pull latest from Hugging Face Space (rebase)
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          git remote add hf https://user:$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git || true
-          git fetch hf main
-          git rebase hf/main
-
-      - name: Commit changes if needed
-        run: |
-          git add -A
-          if git diff --cached --quiet; then
-            echo "ℹ️ No changes to commit"
-          else
-            git commit -m "🚀 Auto-deploy: update Space from GitHub Actions"
-          fi
-
       - name: Push to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git push https://user:$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git main
+          set -e
+          HF_REPO="https://user:$HF_TOKEN@huggingface.co/spaces/Thilagavathy/finalproject.git"
+
+          # Remove old remote if exists, then add fresh one
+          git remote remove hf || true
+          git remote add hf "$HF_REPO"
+
+          # 🚨 Force push GitHub main branch → Hugging Face main
+          git push hf main --force
